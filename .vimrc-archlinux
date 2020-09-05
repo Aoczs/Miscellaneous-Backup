@@ -1,0 +1,186 @@
+""""""""""""""""""""""""""""""""
+"""""""""Vundle SETTINGS""""""""
+""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+""""" Plugin 'L9'
+" Git plugin not hosted on GitHub
+""""" Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+""""" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+""""" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+""""""""""""""""""""""""""""""""
+"""""""""BASIC SETTINGS"""""""""
+""""""""""""""""""""""""""""""""
+" open or close line number
+set number
+
+" show relative line number
+set relativenumber
+
+" set text width in one line
+set textwidth=80
+
+" set no line wrap
+set nowrap
+" set wrap
+" set linebreak
+" set wrapmargin=2
+
+" set vertical scroll margin of top/bottom
+set scrolloff=10
+
+" set horizontal scroll margin of left/right
+set sidescrolloff=15
+
+" show status bar
+set laststatus=2
+
+" show current cursor position
+set ruler
+
+" highlight cursor line
+set cursorline
+
+" set utf-8 encoding
+set encoding=utf-8
+
+" set no compatible with Vi
+set nocompatible
+
+" open syntax highlight
+syntax on
+
+" show current mode
+set showmode
+
+" show current inputted instructions in command mode
+set showcmd
+
+" support using mouse
+set mouse=a
+
+" enable 256 colors
+set t_Co=256
+
+" enable file type check to load respond indent rules
+filetype indent on
+
+" auto indent after <ENTER>
+set autoindent
+
+" set how many <space> after one tab
+set tabstop=4
+
+" set '>>', '<<' and '==' correspond <space> width
+set shiftwidth=4
+
+" auto transfer from <tab> to <space>
+" And one <tab> to how many <space>
+set expandtab
+set softtabstop=4
+
+" auto highlight other punctuation marks when encountering brace and bracket
+set showmatch
+
+" highlight match result of search
+set hlsearch
+
+" increase search in input
+set incsearch
+
+" ignore upper and lower case in search
+set ignorecase
+" set smartcase
+
+" open English spell check
+" set spell spelllang=en_us
+
+" save undo history
+set undofile
+
+" set path of backup/swap/undo files
+set backupdir=~/.vim/.backup//
+set directory=~/.vim/.swp//
+set undodir=~/.vim/.undo//
+
+" auto switch work directory
+set autochdir
+
+" set no error bells
+set noerrorbells
+
+" set visual bell instead of sound
+set visualbell
+
+" set how many history operations needed to be remembered
+set history=1000
+
+" open file monitor
+set autoread
+
+" set <tab> auto complete of command in command mode
+set wildmenu
+set wildmode=longest:list,full
+
+""""""""""""""""""""""""""""""""
+""""""""""KEY MAPPING"""""""""""
+""""""""""""""""""""""""""""""""
+inoremap <Up> <Nop>
+nnoremap <Up> <Nop>
+
+inoremap <Down> <Nop>
+nnoremap <Down> <Nop>
+
+inoremap <Right> <Nop>
+nnoremap <Right> <Nop>
+
+inoremap <Left> <Nop>
+nnoremap <Left> <Nop>
+
+inoremap jk <Esc>
+
+nnoremap H ^
+nnoremap L $
+
+""""""""""""""""""""""""""""""""
+"""""""""FILE TYPE Ref""""""""""
+""""""""""""""""""""""""""""""""
+" make file settings 
+" no expand tab in make file
+autocmd FileType make set noexpandtab
