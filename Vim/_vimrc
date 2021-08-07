@@ -1,0 +1,190 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""Spcial Error Fix""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fix the gui menu encoding error in #Windows x86
+set langmenu=en.US.UTF-8
+language en
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""PLUGINS List""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" I using the vim-plug for plugin-management
+" Plugins will be downloaded under the specified directory.
+call plug#begin('$HOME/vimfiles/plugged')
+" Declare the list of plugins.
+Plug 'altercation/vim-colors-solarized'
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""PLUGINS SETTINGS""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" GUI mode light color background, terminal mode deep color background
+syntax enable
+if has('gui_running')
+    set background=dark
+else
+    set background=dark
+endif
+" theme is set to solarized
+colorscheme solarized
+
+" other settings
+let g:solarized_termcolors=256
+" let g:solarized_termtrans = 1 " use termal background
+let g:solarized_visibility = "high" " user :set list display the hight level of special characters
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""Frequently Settings"""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set guifont=Cascadia_Code:h12
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""BASIC SETTINGS""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cursor shape settings
+" In KONSOLE, 'mouseshape' option can not work
+" So, following is the solutions:
+" (It works, but the changing speed is a little **slow**)
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
+
+" open or close line number
+set number
+
+" show relative line number
+set relativenumber
+
+" set text width in one line
+set textwidth=80
+
+" set no line wrap
+set nowrap
+" set wrap
+" set linebreak
+" set wrapmargin=2
+
+" set vertical scroll margin of top/bottom
+set scrolloff=10
+
+" set horizontal scroll margin of left/right
+set sidescrolloff=15
+
+" show status bar
+set laststatus=2
+
+" show current cursor position
+set ruler
+
+" highlight cursor line
+set cursorline
+
+" set utf-8 encoding
+set encoding=utf-8
+
+" set no compatible with Vi
+set nocompatible
+
+" open syntax highlight
+syntax on
+
+" show current mode
+set showmode
+
+" show current inputted instructions in command mode
+set showcmd
+
+" support using mouse
+set mouse=a
+
+" enable 256 colors
+set t_Co=256
+
+" enable file type check to load respond indent rules
+filetype indent on
+
+" auto indent after <ENTER>
+set autoindent
+
+" set how many <space> after one tab
+set tabstop=4
+
+" set '>>', '<<' and '==' correspond <space> width
+set shiftwidth=4
+
+" auto transfer from <tab> to <space>
+" And one <tab> to how many <space>
+set expandtab
+set softtabstop=4
+
+" auto highlight other punctuation marks when encountering brace and bracket
+set showmatch
+
+" highlight match result of search
+set hlsearch
+
+" increase search in input
+set incsearch
+
+" ignore upper and lower case in search
+set ignorecase
+" set smartcase
+
+" open English spell check
+" set spell spelllang=en_us
+
+" save undo history
+set undofile
+
+" set path of backup/swap/undo files in linux
+" should be turned off under windows
+" set backupdir=~/.vim/.backup//
+" set directory=~/.vim/.swp//
+" set undodir=~/.vim/.undo//
+
+" auto switch work directory
+set autochdir
+
+" set no error bells
+set noerrorbells
+
+" set visual bell instead of sound
+set visualbell
+
+" set how many history operations needed to be remembered
+set history=1000
+
+" open file monitor
+set autoread
+
+" set <tab> auto complete of command in command mode
+set wildmenu
+set wildmode=longest:list,full
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""KEY MAPPING"""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+inoremap <Up> <Nop>
+nnoremap <Up> <Nop>
+
+inoremap <Down> <Nop>
+nnoremap <Down> <Nop>
+
+inoremap <Right> <Nop>
+nnoremap <Right> <Nop>
+
+inoremap <Left> <Nop>
+nnoremap <Left> <Nop>
+
+inoremap jk <Esc>
+
+nnoremap H ^
+nnoremap L $
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" make file settings 
+"" no expand tab in make file
+autocmd FileType make set noexpandtab
