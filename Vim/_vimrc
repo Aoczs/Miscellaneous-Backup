@@ -1,40 +1,38 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Spcial Error Fix""""""""""""""""""""""""""""""""""""
+""""""""Special Error Fix"""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fix the gui menu encoding error in #Windows x86
+" But this error still occurs under gVim-Easy
 set langmenu=en.US.UTF-8
 language en
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS List""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" I using the vim-plug for plugin-management
+" I am using the vim-plug for plugin-management RIGHT NOW.
+"
 " Plugins will be downloaded under the specified directory.
 call plug#begin('$HOME/vimfiles/plugged')
+"
 " Declare the list of plugins.
+"
 " ------Appearance---------------------------------------- "
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
+Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
+"
 " ------Functions----------------------------------------- "
 Plug 'jiangmiao/auto-pairs'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS SETTINGS""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ------------------------------ "
-" ------Coc.nvim---------------- "
-" ------------------------------ "
-" ------Extensions management----------------------------- "
-let g:coc_global_extensions=['coc-json', 'coc-clangd']
-" ------Completion Setting(like key mapping)-------------- "
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 " ------------------------------ "
 " ------Solarized--------------- "
 " ------------------------------ "
@@ -50,13 +48,18 @@ endif
 
 " other settings
 "let g:solarized_termcolors=256
-" let g:solarized_termtrans = 1 " use termal background
+"let g:solarized_termtrans = 1 " use termal background
 "let g:solarized_visibility = "high" " user :set list display the hight level of special characters
 
 " ------------------------------ "
 " ------Gruvbox----------------- "
 " ------------------------------ "
-colorscheme gruvbox
+"colorscheme gruvbox
+
+" ------------------------------ "
+" ------onedark.vim------------- "
+" ------------------------------ "
+colorscheme onedark
 
 " ------------------------------ "
 " ------Airline----------------- "
@@ -64,8 +67,16 @@ colorscheme gruvbox
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+" ------------------------------ "
+" ------Coc.nvim---------------- "
+" ------------------------------ "
+" ------Extensions management----------------------------- "
+let g:coc_global_extensions = ['coc-json', 'coc-clangd']
+" ------Completion Setting(like key mapping)-------------- "
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Frequently Settings"""""""""""""""""""""""""""""""""
+""""""""Frequently Used Settings""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set guifont=Source_Code_Pro_for_Powerline:h12:cANSI
 set backspace=2
@@ -95,9 +106,9 @@ set textwidth=60
 
 " set no line wrap
 set nowrap
-" set wrap
-" set linebreak
-" set wrapmargin=2
+"set wrap
+"set linebreak
+"set wrapmargin=2
 
 " set vertical scroll margin of top/bottom
 set scrolloff=10
@@ -163,19 +174,23 @@ set incsearch
 
 " ignore upper and lower case in search
 set ignorecase
-" set smartcase
+"set smartcase
 
 " open English spell check
-" set spell spelllang=en_us
+"set spell spelllang=en_us
 
 " save undo history
 set undofile
 
 " set path of backup/swap/undo files in linux
 " should be turned off under windows
-" set backupdir=~/.vim/.backup//
-" set directory=~/.vim/.swp//
-" set undodir=~/.vim/.undo//
+"set backupdir=~/.vim/.backup//
+"set directory=~/.vim/.swp//
+"set undodir=~/.vim/.undo//
+" for windows
+set backupdir=~/vimfiles/.backup//
+set directory=~/vimfiles/.swp//
+set undodir=~/vimfiles/.undo//
 
 " auto switch work directory
 set autochdir
@@ -224,7 +239,9 @@ nnoremap <CR> :noh<CR><CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" make file settings 
-"" no expand tab in make file
+" ------make file settings---------------------------------- "
+" don't expand <tab> with <space> in make file
 autocmd FileType make set noexpandtab
+" ------json file settings---------------------------------- "
+" let '//' match the comment's style like cpp
 autocmd FileType json syntax match Comment +\/\/.\+$+
