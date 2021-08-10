@@ -12,13 +12,32 @@ language en
 " Plugins will be downloaded under the specified directory.
 call plug#begin('$HOME/vimfiles/plugged')
 " Declare the list of plugins.
+" ------Appearance---------------------------------------- "
 Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" ------Functions----------------------------------------- "
+Plug 'jiangmiao/auto-pairs'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS SETTINGS""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ------------------------------ "
+" ------Coc.nvim---------------- "
+" ------------------------------ "
+" ------Extensions management----------------------------- "
+let g:coc_global_extensions=['coc-json', 'coc-clangd']
+" ------Completion Setting(like key mapping)-------------- "
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" ------------------------------ "
+" ------Solarized--------------- "
+" ------------------------------ "
 " GUI mode light color background, terminal mode deep color background
 syntax enable
 if has('gui_running')
@@ -27,17 +46,32 @@ else
     set background=dark
 endif
 " theme is set to solarized
-colorscheme solarized
+"colorscheme solarized
 
 " other settings
-let g:solarized_termcolors=256
+"let g:solarized_termcolors=256
 " let g:solarized_termtrans = 1 " use termal background
-let g:solarized_visibility = "high" " user :set list display the hight level of special characters
+"let g:solarized_visibility = "high" " user :set list display the hight level of special characters
+
+" ------------------------------ "
+" ------Gruvbox----------------- "
+" ------------------------------ "
+colorscheme gruvbox
+
+" ------------------------------ "
+" ------Airline----------------- "
+" ------------------------------ "
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""Frequently Settings"""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set guifont=Cascadia_Code:h12
+set guifont=Source_Code_Pro_for_Powerline:h12:cANSI
+set backspace=2
+
+" correctly match 'json' file comments
+"autocmd FileType json syntax match Comment +\/\/.\+$+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""BASIC SETTINGS""""""""""""""""""""""""""""""""""""""
@@ -57,7 +91,7 @@ set number
 set relativenumber
 
 " set text width in one line
-set textwidth=80
+set textwidth=60
 
 " set no line wrap
 set nowrap
@@ -182,9 +216,15 @@ inoremap jk <Esc>
 nnoremap H ^
 nnoremap L $
 
+"inoremap ( ()<Left>
+"inoremap { {}<Left><CR><Esc>O<Tab>
+
+nnoremap <CR> :noh<CR><CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " make file settings 
 "" no expand tab in make file
 autocmd FileType make set noexpandtab
+autocmd FileType json syntax match Comment +\/\/.\+$+
