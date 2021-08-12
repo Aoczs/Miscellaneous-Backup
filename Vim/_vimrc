@@ -26,6 +26,7 @@ Plug 'vim-airline/vim-airline-themes'
 " ------Functions----------------------------------------- "
 Plug 'jiangmiao/auto-pairs'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'sheerun/vim-polyglot'
 "
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -54,12 +55,12 @@ endif
 " ------------------------------ "
 " ------Gruvbox----------------- "
 " ------------------------------ "
-"colorscheme gruvbox
+autocmd vimenter * ++nested colorscheme gruvbox
 
 " ------------------------------ "
 " ------onedark.vim------------- "
 " ------------------------------ "
-colorscheme onedark
+"colorscheme onedark
 
 " ------------------------------ "
 " ------Airline----------------- "
@@ -74,6 +75,17 @@ let g:airline_powerline_fonts = 1
 let g:coc_global_extensions = ['coc-json', 'coc-clangd']
 " ------Completion Setting(like key mapping)-------------- "
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" ------------------------------ "
+" ------vim-polyglot------------ "
+" ------------------------------ "
+" nothing need to disable
+"let g:polyglot_disalbed = []
+
+" ------------------------------ "
+" ------netrw settings---------- "
+" ------------------------------ "
+let g:netrw_winsize = 25
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""Frequently Used Settings""""""""""""""""""""""""""""
@@ -214,6 +226,7 @@ set wildmode=longest:list,full
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""KEY MAPPING"""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ------basic key mapping--------------------------------- "
 inoremap <Up> <Nop>
 nnoremap <Up> <Nop>
 
@@ -234,14 +247,24 @@ nnoremap L $
 "inoremap ( ()<Left>
 "inoremap { {}<Left><CR><Esc>O<Tab>
 
+" For canceling highlight-status after using '/' to search
 nnoremap <CR> :noh<CR><CR>
+
+" ------leader key mapping-------------------------------- "
+" set <Leader> to <Space>
+let mapleader = ' '
+
+" set hotkeys to edit and source $MYVIMRC
+nnoremap <Leader>ev :vsp $MYVIMRC<CR>
+nnoremap <Leader>sv :source $MYVIMRC<CR>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ------make file settings---------------------------------- "
+" ------make file settings-------------------------------- "
 " don't expand <tab> with <space> in make file
 autocmd FileType make set noexpandtab
-" ------json file settings---------------------------------- "
+" ------json file settings-------------------------------- "
 " let '//' match the comment's style like cpp
 autocmd FileType json syntax match Comment +\/\/.\+$+
