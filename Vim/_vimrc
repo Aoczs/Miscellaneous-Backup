@@ -27,6 +27,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'jiangmiao/auto-pairs'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
+Plug 'preservim/nerdtree'
 "
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
