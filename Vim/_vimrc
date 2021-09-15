@@ -7,6 +7,51 @@ set langmenu=en.US.UTF-8
 language en
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""KEY MAPPING"""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ------basic key mapping--------------------------------- "
+inoremap <Up> <Nop>
+nnoremap <Up> <Nop>
+
+inoremap <Down> <Nop>
+nnoremap <Down> <Nop>
+
+inoremap <Right> <Nop>
+nnoremap <Right> <Nop>
+
+inoremap <Left> <Nop>
+nnoremap <Left> <Nop>
+
+inoremap jk <Esc>
+
+nnoremap H ^
+nnoremap L $
+
+"inoremap ( ()<Left>
+"inoremap { {}<Left><CR><Esc>O<Tab>
+
+" For canceling highlight-status after using '/' to search
+nnoremap <CR> :noh<CR><CR>
+
+" ------leader key mapping-------------------------------- "
+" set <Leader> to <Space>
+let mapleader = ' '
+
+" set hotkeys to edit and source $MYVIMRC
+nnoremap <Leader>ev :vsp $MYVIMRC<CR>
+nnoremap <Leader>sv :source $MYVIMRC<CR>
+
+" ------C++ compilation settings-------------------------- "
+" under WINDOWS
+nnoremap <Leader>c :! g++ "%" -g -o "%<.exe"<CR>
+nnoremap <Leader>r :! %<.exe<CR>
+nnoremap <Leader>cr :! g++ "%" -g -o "%<.exe" && %.exe<CR>
+nnoremap <Leader>db :!start gdb "%<.exe"<CR>
+" clean all *.o *.exe files
+nnoremap <Leader>cl :!start _clean.bat<CR>
+" under LINUX
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS List""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " I am using the vim-plug for plugin-management RIGHT NOW.
@@ -56,12 +101,12 @@ endif
 " ------------------------------ "
 " ------Gruvbox----------------- "
 " ------------------------------ "
-autocmd vimenter * ++nested colorscheme gruvbox
+"autocmd vimenter * ++nested colorscheme gruvbox
 
 " ------------------------------ "
 " ------onedark.vim------------- "
 " ------------------------------ "
-"colorscheme onedark
+autocmd vimenter * ++nested colorscheme onedark
 
 " ------------------------------ "
 " ------Airline----------------- "
@@ -75,6 +120,7 @@ let g:airline_powerline_fonts = 1
 " ------Extensions management----------------------------- "
 let g:coc_global_extensions = ['coc-json', 'coc-clangd']
 " ------Completion Setting(like key mapping)-------------- "
+" use <cr> to confirm completion
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " ------------------------------ "
@@ -88,10 +134,19 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " ------------------------------ "
 let g:netrw_winsize = 25
 
+" ------------------------------ "
+" ------NERDTree settings------- "
+" ------------------------------ "
+" hotkey for toggle NERDTree
+nnoremap <Leader><Leader> :NERDTreeToggle<CR>
+" don't show hidden files
+let g:NERDTreeShowHidden=0
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""Frequently Used Settings""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set guifont=Source_Code_Pro_for_Powerline:h12:cANSI
+set guifontwide=Sarasa_Mono_Slab_CL:h12
 set backspace=2
 
 " correctly match 'json' file comments
@@ -223,42 +278,6 @@ set autoread
 " set <tab> auto complete of command in command mode
 set wildmenu
 set wildmode=longest:list,full
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""KEY MAPPING"""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ------basic key mapping--------------------------------- "
-inoremap <Up> <Nop>
-nnoremap <Up> <Nop>
-
-inoremap <Down> <Nop>
-nnoremap <Down> <Nop>
-
-inoremap <Right> <Nop>
-nnoremap <Right> <Nop>
-
-inoremap <Left> <Nop>
-nnoremap <Left> <Nop>
-
-inoremap jk <Esc>
-
-nnoremap H ^
-nnoremap L $
-
-"inoremap ( ()<Left>
-"inoremap { {}<Left><CR><Esc>O<Tab>
-
-" For canceling highlight-status after using '/' to search
-nnoremap <CR> :noh<CR><CR>
-
-" ------leader key mapping-------------------------------- "
-" set <Leader> to <Space>
-let mapleader = ' '
-
-" set hotkeys to edit and source $MYVIMRC
-nnoremap <Leader>ev :vsp $MYVIMRC<CR>
-nnoremap <Leader>sv :source $MYVIMRC<CR>
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
