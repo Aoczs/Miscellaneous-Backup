@@ -43,12 +43,17 @@ nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 " ------C++ compilation settings-------------------------- "
 " under WINDOWS
-nnoremap <Leader>c :! g++ "%" -g -o "%<.exe"<CR>
-nnoremap <Leader>r :! %<.exe<CR>
-nnoremap <Leader>cr :! g++ "%" -g -o "%<.exe" && %.exe<CR>
-nnoremap <Leader>db :!start gdb "%<.exe"<CR>
-" clean all *.o *.exe files
-nnoremap <Leader>cl :!start _clean.bat<CR>
+if has('gui_running')
+    nnoremap <Leader>c :! g++ "%" -g -o "%<.exe"<CR>
+    nnoremap <Leader>r :! %<.exe<CR>
+    nnoremap <Leader>cr :! g++ "%" -g -o "%<.exe" && %.exe<CR>
+    nnoremap <Leader>db :!start gdb "%<.exe"<CR>
+    " clean all *.o *.exe files
+    "nnoremap <Leader>cl :!start _clean.bat<CR>
+    nnoremap <Leader>cl :! del *.o *.exe<CR>
+    " Makefile
+	nnoremap <Leader>mk :! mingw32-make<CR>
+endif
 " under LINUX
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -71,8 +76,11 @@ Plug 'vim-airline/vim-airline-themes'
 " ------Functions----------------------------------------- "
 Plug 'jiangmiao/auto-pairs'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-fugitive'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'OmniSharp/omnisharp-vim'
 "
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -101,27 +109,39 @@ endif
 " ------------------------------ "
 " ------Gruvbox----------------- "
 " ------------------------------ "
-"autocmd vimenter * ++nested colorscheme gruvbox
+if has('nvim')
+    autocmd vimenter * ++nested colorscheme gruvbox
+endif
+autocmd vimenter * ++nested colorscheme gruvbox
+"let g:gruvbox_italic = 0
 
 " ------------------------------ "
 " ------onedark.vim------------- "
 " ------------------------------ "
-autocmd vimenter * ++nested colorscheme onedark
+if !has('nvim')
+    "autocmd vimenter * ++nested colorscheme onedark
+    "let g:onedark_terminal_italics = 1
+endif
 
 " ------------------------------ "
 " ------Airline----------------- "
 " ------------------------------ "
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_powerline_fonts = 1
 
 " ------------------------------ "
 " ------Coc.nvim---------------- "
 " ------------------------------ "
 " ------Extensions management----------------------------- "
-let g:coc_global_extensions = ['coc-json', 'coc-clangd']
+let g:coc_global_extensions = ['coc-lists', 'coc-json', 'coc-clangd', 'coc-pyright']
 " ------Completion Setting(like key mapping)-------------- "
 " use <cr> to confirm completion
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" ------Key Mapping--------------------------------------- "
+" coc.nvim mapping settings
+nnoremap <Leader>l :CocList --normal<CR>
+nnoremap <Leader>rl :CocListResume<CR>
 
 " ------------------------------ "
 " ------vim-polyglot------------ "
@@ -142,12 +162,43 @@ nnoremap <Leader><Leader> :NERDTreeToggle<CR>
 " don't show hidden files
 let g:NERDTreeShowHidden=0
 
+" ------------------------------ "
+" -NERDTree-git-plugin settings- "
+" ------------------------------ "
+" custom symbols
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+" show ignored status
+"let g:NERDTreeGitStatusShowIgnored = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""Frequently Used Settings""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set guifont=Source_Code_Pro_for_Powerline:h12:cANSI
-set guifontwide=Sarasa_Mono_Slab_CL:h12
+" ------Font Settings------------------------------------- "
+" basic settings
+if !has('nvim')
+    "set guifont=Source_Code_Pro_for_Powerline:h12:cANSI
+    set guifont=Sarasa\ Mono\ CL:h12
+    set guifontwide=Sarasa_Mono_Slab_CL:h12
+endif
+if has('nvim')
+    set guifont=Sarasa\ Mono\ CL:h12
+    set guifontwide=Sarasa\ Mono\ Slab\ CL:h12
+endif
 set backspace=2
+
+" gui options, defualt is 'gmrLtT'
+set guioptions=grLt
 
 " correctly match 'json' file comments
 "autocmd FileType json syntax match Comment +\/\/.\+$+
@@ -159,9 +210,11 @@ set backspace=2
 " In KONSOLE, 'mouseshape' option can not work
 " So, following is the solutions:
 " (It works, but the changing speed is a little **slow**)
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[4 q"
-let &t_EI = "\<Esc>[2 q"
+if &term =~ "^xterm"
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[3 q"
+    let &t_EI = "\<Esc>[2 q"
+endif
 
 " open or close line number
 set number
@@ -192,6 +245,9 @@ set ruler
 
 " highlight cursor line
 set cursorline
+
+" highlight cursor column
+"set cursorcolumn
 
 " set utf-8 encoding
 set encoding=utf-8
@@ -250,15 +306,24 @@ set ignorecase
 " save undo history
 set undofile
 
-" set path of backup/swap/undo files in linux
-" should be turned off under windows
-"set backupdir=~/.vim/.backup//
-"set directory=~/.vim/.swp//
-"set undodir=~/.vim/.undo//
-" for windows
-set backupdir=~/vimfiles/.backup//
-set directory=~/vimfiles/.swp//
-set undodir=~/vimfiles/.undo//
+" set path of backup/swap/undo files
+if has('nvim')
+    " windows & linux for neovim
+    let $XDG_DATA_HOME=stdpath("data")
+    set undodir=$XDG_DATA_HOME/nvim/undo//
+    set backupdir=.,$XDG_DATA_HOME/nvim/backup//
+    set directory=$XDG_DATA_HOME/nvim/swap//
+elseif has('win32')
+    " windows for vim
+    set backupdir=~/vimfiles/.backup//
+    set directory=~/vimfiles/.swp//
+    set undodir=~/vimfiles/.undo//
+else
+    " linux for vim
+    set backupdir=~/.vim/.backup//
+    set directory=~/.vim/.swp//
+    set undodir=~/.vim/.undo//
+endif
 
 " auto switch work directory
 set autochdir
@@ -282,8 +347,8 @@ set wildmode=longest:list,full
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ------make file settings-------------------------------- "
-" don't expand <tab> with <space> in make file
+" ------makefile settings--------------------------------- "
+" don't expand <tab> with <space> in makefile
 autocmd FileType make set noexpandtab
 " ------json file settings-------------------------------- "
 " let '//' match the comment's style like cpp
