@@ -43,10 +43,14 @@ nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 " ------C++ compilation settings-------------------------- "
 " under WINDOWS
-if has('gui_running')
+if has('win32')
+    set makeprg=mingw32-make
+endif
+
+if (has('gui_running') && has('win32')) || has('nvim')
     nnoremap <Leader>c :! g++ "%" -g -o "%<.exe"<CR>
     nnoremap <Leader>r :! %<.exe<CR>
-    nnoremap <Leader>cr :! g++ "%" -g -o "%<.exe" && %.exe<CR>
+    nnoremap <Leader>cr :! g++ "%" -g -o "%<.exe" && %<.exe<CR>
     nnoremap <Leader>db :!start gdb "%<.exe"<CR>
     " clean all *.o *.exe files
     "nnoremap <Leader>cl :!start _clean.bat<CR>
@@ -70,6 +74,7 @@ call plug#begin('$HOME/vimfiles/plugged')
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
+Plug 'cormacrelf/vim-colors-github'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "
@@ -113,7 +118,7 @@ if has('nvim')
     autocmd vimenter * ++nested colorscheme gruvbox
 endif
 autocmd vimenter * ++nested colorscheme gruvbox
-"let g:gruvbox_italic = 0
+let g:gruvbox_italic = 0
 
 " ------------------------------ "
 " ------onedark.vim------------- "
@@ -122,6 +127,16 @@ if !has('nvim')
     "autocmd vimenter * ++nested colorscheme onedark
     "let g:onedark_terminal_italics = 1
 endif
+
+" ------------------------------ "
+" ------vim-colors-github------- "
+" ------------------------------ "
+"colorscheme github
+"set background=light
+
+" if you use airline / lightline
+"let g:airline_theme = 'github'
+"let g:lightline = { 'colorscheme': 'github' }
 
 " ------------------------------ "
 " ------Airline----------------- "
@@ -198,7 +213,8 @@ endif
 set backspace=2
 
 " gui options, defualt is 'gmrLtT'
-set guioptions=grLt
+set guioptions=grLtc
+"set guioptions=grLtce
 
 " correctly match 'json' file comments
 "autocmd FileType json syntax match Comment +\/\/.\+$+
@@ -285,7 +301,7 @@ set shiftwidth=4
 " auto transfer from <tab> to <space>
 " And one <tab> to how many <space>
 set expandtab
-set softtabstop=4
+set softtabstop=0
 
 " auto highlight other punctuation marks when encountering brace and bracket
 set showmatch
