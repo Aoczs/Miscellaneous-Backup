@@ -1,14 +1,23 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Special Error Fix"""""""""""""""""""""""""""""""""""
+""""""""Variable Definations""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Fix the gui menu encoding error in #Windows x86
-" But this error still occurs under gVim-Easy
-set langmenu=en.US.UTF-8
-language en
+" {{{1
+if has('nvim')
+    let $XDG_DATA_HOME=stdpath("data")
+    let $XDG_CONFIG_HOME=stdpath("config")
+endif
+
+if has('win32')
+    let $VIM_FILE_HOME='$HOME/vimfiles'
+else
+    let $VIM_FILE_HOME='$HOME/.vim'
+endif
+" }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""KEY MAPPING"""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " ------basic key mapping--------------------------------- "
 inoremap <Up> <Nop>
 nnoremap <Up> <Nop>
@@ -60,13 +69,45 @@ if (has('gui_running') && has('win32')) || has('nvim')
 endif
 " under LINUX
 
+" ------Sessions Settings--------------------------------- "
+" avoid error by NERDTree
+set sessionoptions-=blank
+" Very important example for expanding variable in key mapping of command mode,
+" there is another usable solution, eg.:
+" -------------------------------- "
+" function! TestFunc()
+"   return ':source' . $VIM_FILE_HOME . '/sessions/'
+" endfunction
+" nnoremap <expr> <leader>ls TestFunc()
+" -------------------------------- "
+" above way is more flexible!!!
+"
+" session save
+nnoremap <expr> <leader>ss ':mksession! ' . $VIM_FILE_HOME . '/session/'
+" session load
+nnoremap <expr> <leader>sl ':source ' . $VIM_FILE_HOME . '/session/'
+"
+" !!!ATTENTION!!!:
+" There was a file 'default.vim' generated in directory '~/vimfile/sessions'(win32),
+" that's because of coc.nvim. Related github issue links below:
+" 'https://github.com/neoclide/coc.nvim/issues/1332'
+"
+" !!!ATTENTION AGAIN!!!:
+" Sessions saving and loading funcions could be implemented by 3 way:
+" > 1. above two key-mappings defined by myself
+" > 2. plugin 'Startify' provide the solution
+" > 3. plugin 'coc.nvim'->'coc-list'->'coc-lists'->'sessions' provide the solution
+"
+" }}}1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS List""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " I am using the vim-plug for plugin-management RIGHT NOW.
 "
 " Plugins will be downloaded under the specified directory.
-call plug#begin('$HOME/vimfiles/plugged')
+call plug#begin($VIM_FILE_HOME .. '/plugged')
 "
 " Declare the list of plugins.
 "
@@ -86,13 +127,17 @@ Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'OmniSharp/omnisharp-vim'
+"Plug 'thaerkh/vim-workspace'
+Plug 'mhinz/vim-startify'
 "
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+" }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""PLUGINS SETTINGS""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " ------------------------------ "
 " ------Solarized--------------- "
 " ------------------------------ "
@@ -196,9 +241,38 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " show ignored status
 "let g:NERDTreeGitStatusShowIgnored = 1
 
+"" ------------------------------ "
+"" ----vim-workspace settings---- "
+"" ------------------------------ "
+"" pre-settings
+"set sessionoptions-=blank
+"" session files directory
+"if !has('nvim')
+"    if has('win32')
+"        let g:workspace_session_directory = $HOME . '/vimfiles/sessions/'
+"    else
+"        let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+"    endif
+"else
+"    let g:workspace_session_directory = $XDG_DATA_HOME . '/nvim/sessions/'
+"endif
+"" auto create workspace
+"let g:workspace_autocreate = 1
+"
+"" often used key binds
+"nnoremap <leader>ws :ToggleWorkspace<CR>
+
+" ------------------------------ "
+" ----vim-startify settings----- "
+" ------------------------------ "
+" use NERDTree bookmarks
+"let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+" }}}1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""Frequently Used Settings""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " ------Font Settings------------------------------------- "
 " basic settings
 if !has('nvim')
@@ -219,9 +293,17 @@ set guioptions=grLtc
 " correctly match 'json' file comments
 "autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" folding settings
+set foldcolumn=2
+"set foldmethod=indent
+set foldmethod=marker
+set foldlevelstart=-1
+" }}}1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""BASIC SETTINGS""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " cursor shape settings
 " In KONSOLE, 'mouseshape' option can not work
 " So, following is the solutions:
@@ -239,7 +321,7 @@ set number
 set relativenumber
 
 " set text width in one line
-set textwidth=60
+set textwidth=80
 
 " set no line wrap
 set nowrap
@@ -325,7 +407,6 @@ set undofile
 " set path of backup/swap/undo files
 if has('nvim')
     " windows & linux for neovim
-    let $XDG_DATA_HOME=stdpath("data")
     set undodir=$XDG_DATA_HOME/nvim/undo//
     set backupdir=.,$XDG_DATA_HOME/nvim/backup//
     set directory=$XDG_DATA_HOME/nvim/swap//
@@ -359,13 +440,26 @@ set autoread
 " set <tab> auto complete of command in command mode
 set wildmenu
 set wildmode=longest:list,full
+" }}}1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""Special Error Fix"""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
+" Fix the gui menu encoding error in #Windows x86
+" But this error still occurs under gVim-Easy
+set langmenu=en.US.UTF-8
+language en
+" }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{1
 " ------makefile settings--------------------------------- "
 " don't expand <tab> with <space> in makefile
 autocmd FileType make set noexpandtab
 " ------json file settings-------------------------------- "
 " let '//' match the comment's style like cpp
 autocmd FileType json syntax match Comment +\/\/.\+$+
+" }}}1
