@@ -1,16 +1,16 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Variable Definations""""""""""""""""""""""""""""""""
+""""""""VARIABLE DEFINATIONS""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{1
 if has('nvim')
-    let $XDG_DATA_HOME=stdpath("data")
-    let $XDG_CONFIG_HOME=stdpath("config")
+    let $XDG_DATA_HOME = substitute(stdpath("data"), "[\\/]nvim.*$", "", "")
+    let $XDG_CONFIG_HOME = substitute(stdpath("config"), "[\\/]nvim.*$", "", "")
 endif
 
 if has('win32')
-    let $VIM_FILE_HOME='$HOME/vimfiles'
+    let $VIM_FILE_HOME = '$HOME/vimfiles'
 else
-    let $VIM_FILE_HOME='$HOME/.vim'
+    let $VIM_FILE_HOME = '$HOME/.vim'
 endif
 " }}}1
 
@@ -49,6 +49,7 @@ let mapleader = ' '
 " set hotkeys to edit and source $MYVIMRC
 nnoremap <Leader>ev :vsp $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
+nnoremap <Leader>bo :browse oldfiles<CR>
 
 " ------C++ compilation settings-------------------------- "
 " under WINDOWS
@@ -83,14 +84,17 @@ set sessionoptions-=blank
 " above way is more flexible!!!
 "
 " session save
-nnoremap <expr> <leader>ss ':mksession! ' . $VIM_FILE_HOME . '/session/'
+nnoremap <expr> <Leader>ss ':mksession! ' . $VIM_FILE_HOME . '/session/'
+"nnoremap <Leader>ss :call CocAction('runCommand', 'session.save')<CR>
 " session load
-nnoremap <expr> <leader>sl ':source ' . $VIM_FILE_HOME . '/session/'
+nnoremap <expr> <Leader>sl ':source ' . $VIM_FILE_HOME . '/session/'
+"nnoremap <Leader>sl :call CocAction('runCommand', 'session.load')<CR> " this command will cause freezing
 "
 " !!!ATTENTION!!!:
 " There was a file 'default.vim' generated in directory '~/vimfile/sessions'(win32),
 " that's because of coc.nvim. Related github issue links below:
 " 'https://github.com/neoclide/coc.nvim/issues/1332'
+" !!!Now I have turned it off in CocConfig file.!!!
 "
 " !!!ATTENTION AGAIN!!!:
 " Sessions saving and loading funcions could be implemented by 3 way:
@@ -98,10 +102,13 @@ nnoremap <expr> <leader>sl ':source ' . $VIM_FILE_HOME . '/session/'
 " > 2. plugin 'Startify' provide the solution
 " > 3. plugin 'coc.nvim'->'coc-list'->'coc-lists'->'sessions' provide the solution
 "
+" !!!NOW SOLUTION!!!:
+" > 1. Startify's session autosave feature
+" > 2. self-defined session management keymapping
 " }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""PLUGINS List""""""""""""""""""""""""""""""""""""""""
+""""""""PLUGINS LIST""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{1
 " I am using the vim-plug for plugin-management RIGHT NOW.
@@ -112,23 +119,27 @@ call plug#begin($VIM_FILE_HOME .. '/plugged')
 " Declare the list of plugins.
 "
 " ------Appearance---------------------------------------- "
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
 Plug 'cormacrelf/vim-colors-github'
+Plug 'mhinz/vim-janah'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "
 " ------Functions----------------------------------------- "
 Plug 'jiangmiao/auto-pairs'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'tpope/vim-fugitive'
 Plug 'sheerun/vim-polyglot'
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'OmniSharp/omnisharp-vim'
 "Plug 'thaerkh/vim-workspace'
 Plug 'mhinz/vim-startify'
+Plug 'easymotion/vim-easymotion'
+"Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 "
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -160,9 +171,9 @@ endif
 " ------Gruvbox----------------- "
 " ------------------------------ "
 if has('nvim')
-    autocmd vimenter * ++nested colorscheme gruvbox
+    "autocmd vimenter * ++nested colorscheme gruvbox
 endif
-autocmd vimenter * ++nested colorscheme gruvbox
+"autocmd vimenter * ++nested colorscheme gruvbox
 let g:gruvbox_italic = 0
 
 " ------------------------------ "
@@ -172,6 +183,13 @@ if !has('nvim')
     "autocmd vimenter * ++nested colorscheme onedark
     "let g:onedark_terminal_italics = 1
 endif
+
+" ------------------------------ "
+" ------janah------------------- "
+" ------------------------------ "
+autocmd ColorScheme janah highlight Normal ctermbg=235
+colorscheme janah
+let g:airline_theme = "minimalist"
 
 " ------------------------------ "
 " ------vim-colors-github------- "
@@ -200,8 +218,12 @@ let g:coc_global_extensions = ['coc-lists', 'coc-json', 'coc-clangd', 'coc-pyrig
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " ------Key Mapping--------------------------------------- "
 " coc.nvim mapping settings
-nnoremap <Leader>l :CocList --normal<CR>
+nnoremap <Leader>l :CocList<CR>
+"nnoremap <Leader>l :CocList --normal<CR>
 nnoremap <Leader>rl :CocListResume<CR>
+" ------Extensions settings----------------------------- "
+"nnoremap <Leader>pr :CocCommand markdown-preview-enhanced.openPreview<CR>
+"nnoremap <Leader>ps :CocCommand markdown-preview-enhanced.syncPreview<CR>
 
 " ------------------------------ "
 " ------vim-polyglot------------ "
@@ -267,10 +289,39 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " ------------------------------ "
 " use NERDTree bookmarks
 "let g:startify_bookmarks = systemlist("cut -sd' ' -f 2- ~/.NERDTreeBookmarks")
+" sessions management
+let g:startify_session_persistence = 1
+let g:startify_session_before_save = [ 'silent! tabdo NERDTreeClose' ]
+nnoremap <Leader>st :Startify<CR>
+
+" ------------------------------ "
+" ----vim-easymotion settings--- "
+" ------------------------------ "
+map <Leader> <Plug>(easymotion-prefix)
+nmap <Leader>f <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+
+" ------------------------------ "
+" -vim-instant-markdown settings "
+" ------------------------------ "
+filetype plugin on
+"Uncomment to override defaults:
+let g:instant_markdown_slow = 1
+"let g:instant_markdown_autostart = 0
+"let g:instant_markdown_open_to_the_world = 1
+"let g:instant_markdown_allow_unsafe_content = 1
+"let g:instant_markdown_allow_external_content = 0
+"let g:instant_markdown_mathjax = 1
+"let g:instant_markdown_mermaid = 1
+"let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+"let g:instant_markdown_autoscroll = 0
+"let g:instant_markdown_port = 8888
+"let g:instant_markdown_python = 1
+"
 " }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Frequently Used Settings""""""""""""""""""""""""""""
+""""""""FREQUENTLY USED SETTINGS""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{1
 " ------Font Settings------------------------------------- "
@@ -297,7 +348,7 @@ set guioptions=grLtc
 set foldcolumn=2
 "set foldmethod=indent
 set foldmethod=marker
-set foldlevelstart=-1
+set foldlevelstart=0
 " }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -443,7 +494,7 @@ set wildmode=longest:list,full
 " }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""Special Error Fix"""""""""""""""""""""""""""""""""""
+""""""""SPECIAL ERROR FIX"""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{1
 " Fix the gui menu encoding error in #Windows x86
@@ -453,7 +504,7 @@ language en
 " }}}1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""FILE TYPE Ref"""""""""""""""""""""""""""""""""""""""
+""""""""FILE TYPE REF"""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{1
 " ------makefile settings--------------------------------- "
